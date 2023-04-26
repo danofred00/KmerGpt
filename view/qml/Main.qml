@@ -6,4 +6,8 @@ Window {
     height: 740
     visible: true
     title: qsTr("KmerGpt")
+
+    Home {
+        anchors.fill: parent
+    }
 }
