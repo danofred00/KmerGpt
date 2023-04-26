@@ -3,5 +3,8 @@
         <file>view/qml/Main.qml</file>
         <file>view/qml/Home.qml</file>
         <file>qtquickcontrols2.conf</file>
+        <file>view/qml/Components/TmpChatListModel.qml</file>
+        <file>view/qml/Components/ChatMessageDelegate.qml</file>
+        <file>view/qml/Components/qmldir</file>
     </qresource>
 </RCC>
