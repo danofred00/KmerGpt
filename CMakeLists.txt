@@ -18,12 +18,12 @@ find_package(Qt6 6.4 REQUIRED COMPONENTS Quick)
 qt_standard_project_setup()
 
 # add executables files
-qt_add_executable(appKmerGpt
+qt_add_executable(KmerGpt
     main.cpp
     resources.qrc
 )
 
-set_target_properties(appKmerGpt PROPERTIES
+set_target_properties(KmerGpt PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
@@ -32,11 +32,11 @@ set_target_properties(appKmerGpt PROPERTIES
 )
 
 # link differents lib to our project
-target_link_libraries(appKmerGpt
+target_link_libraries(KmerGpt
     PRIVATE Qt6::Quick
 )
 
 # install the app
-install(TARGETS appKmerGpt
+install(TARGETS KmerGpt
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
