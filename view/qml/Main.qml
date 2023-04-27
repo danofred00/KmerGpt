@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Window
+import QtQuick.Controls
 
 Window {
     width: 360
@@ -7,7 +8,21 @@ Window {
     visible: true
     title: qsTr("KmerGpt")
 
-    Home {
+    FirstScreen {
+        id: firstScreen
         anchors.fill: parent
     }
+
+    StackView {
+
+        id: stack
+        initialItem: firstScreen
+        anchors.fill: parent
+
+        Home {
+            id: homePage
+            anchors.fill: parent
+        }
+    }
+
 }

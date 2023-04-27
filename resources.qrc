@@ -6,5 +6,8 @@
         <file>view/qml/Components/TmpChatListModel.qml</file>
         <file>view/qml/Components/ChatMessageDelegate.qml</file>
         <file>view/qml/Components/qmldir</file>
+        <file>view/assets/png/arrow.png</file>
+        <file>view/assets/png/send-message.png</file>
+        <file>view/qml/FirstScreen.qml</file>
     </qresource>
 </RCC>

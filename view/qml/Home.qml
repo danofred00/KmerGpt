@@ -6,10 +6,9 @@ import "./Components" as Components
 
 Page {
 
-    // property string title: "KmerGpt"
+    id: root
 
-    id: homePage
-    anchors.fill: parent
+    property string username
 
     header: ToolBar {
 
@@ -32,6 +31,8 @@ Page {
         id: drawer
         width: 300
         height: parent.height
+
+
 
     }
 
@@ -73,15 +74,21 @@ Page {
                         anchors.fill: parent
                         verticalAlignment: Qt.AlignVCenter
                         placeholderText: qsTr("Type any text")
-                        placeholderTextColor: "black"
+                        // placeholderTextColor: "black"
                         wrapMode: Text.Wrap
 
                     }
                 }
 
-            Button {
-                text: "send"
+            RoundButton {
+
+                icon.source: "qrc:/view/assets/png/send-message.png"
+                display: Button.IconOnly
                 onClicked: {
+
+                    if(userMessage.text === "")
+                        return;
+
                     console.log("message Send")
                     chatModel.append(
                     {
