@@ -16,7 +16,7 @@ ChatRequest * ChatRequest::fromJson(const QByteArray &json)
     QJsonParseError error;
     auto obj = QJsonDocument::fromJson(json, &error);
 
-    if(error.errorString() == "")
+    if(error.error != QJsonParseError::NoError)
         qDebug() << "[PARSE_ERROR]" << error.errorString();
 
     request->m_model = obj["model"].toString();
@@ -79,7 +79,7 @@ ChatResponse::ChatResponse(const QByteArray & json)
     QJsonParseError error;
     auto obj = QJsonDocument::fromJson(json, &error);
 
-    if(error.errorString() == "")
+    if(error.error != QJsonParseError::NoError)
         qDebug() << "[PARSE_ERROR]" << error.errorString();
 
     m_model = obj["model"].toString();
