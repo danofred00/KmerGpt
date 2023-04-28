@@ -10,7 +10,7 @@ class OpenAI : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(ILogger * logger READ logger WRITE setLogger NOTIFY loggerChanged)
-    Q_PROPERTY(ChatResponse response READ response)
+    Q_PROPERTY(ChatResponse * response READ response)
 
 public:
     OpenAI(ILogger * logger, QObject *parent = nullptr);
@@ -28,7 +28,7 @@ public:
 public slots:
     void init();
     void send(const QString & text);
-    inline ChatResponse response() const { return m_response; }
+    inline ChatResponse * response() { return &m_response; }
 
 signals:
     void loggerChanged();
