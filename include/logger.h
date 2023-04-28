@@ -3,12 +3,17 @@
 
 #include <string>
 #include <fstream>
+#include <QObject>
 
-class ILogger
+class ILogger : public QObject
 {
+    Q_OBJECT
+
 public:
 
     enum ILogLevel {DEBUG, CRITICAL, WARNING, ERROR};
+
+public slots:
     virtual void log(const std::string & msg, ILogLevel level = ILogLevel::DEBUG) = 0;
     virtual void d(const std::string & msg) = 0;
     virtual void w(const std::string & msg) = 0;
@@ -20,11 +25,13 @@ private:
 
 };
 
-class Logger : public ILogger {
+class Logger : public ILogger
+{
+    Q_OBJECT
 public:
     Logger();
     static Logger * toFile(const std::string & filename);
-
+public slots:
     void log(const std::string & msg, ILogLevel level = ILogLevel::DEBUG) override;
     void d(const std::string & msg) override;
     void w(const std::string & msg) override;
