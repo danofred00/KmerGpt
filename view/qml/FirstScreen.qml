@@ -16,8 +16,9 @@ Page {
 
     function goHome() {
         if (validateInput(usernameField)) {
-            homePage.username = usernameField.text
-            stack.push(homePage);
+            loader.source = "Home.qml"
+            loader.item.username = usernameField.text
+            stack.push(loader.item);
         }
     }
 

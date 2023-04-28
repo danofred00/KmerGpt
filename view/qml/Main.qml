@@ -13,15 +13,16 @@ Window {
         anchors.fill: parent
     }
 
+    Loader {
+        id: loader
+    }
+
     StackView {
 
         id: stack
         initialItem: firstScreen
         anchors.fill: parent
-
-        Home {
-            id: homePage
-            anchors.fill: parent
-        }
     }
+
+
 }
