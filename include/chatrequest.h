@@ -53,6 +53,7 @@ class ChatResponse : public QObject
     Q_PROPERTY(QString model READ model)
     Q_PROPERTY(QString object READ object)
     Q_PROPERTY(QString id READ id)
+    Q_PROPERTY(QByteArray json READ toJson)
 
 public:
 
