@@ -109,20 +109,23 @@ Page {
         }
     }
 
-    Component.onCompleted: OpenAI.init()
+    Component.onCompleted: {
+        // init OpenAI services when page is loaded
+        OpenAI.init()
+    }
 
     Connections {
         target: OpenAI
         function onResponseReceived(response) {
+            // response object is updated when this signal is emit
+            OpenAI.logger.d("New response from Assistant")
 
-            console.log(response)
-            var message = JSON.parse(response)["choices"][0]["message"]
-            console.log(message)
+            var message = OpenAI.response.message
 
             chatModel.append(
             {
-                "role": message["role"],
-                "message": message["content"]
+                "role": message.role,
+                "message": message.content
             })
         }
     }
