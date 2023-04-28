@@ -42,4 +42,44 @@ private:
 
 };
 
+///
+///
+///
+
+class ChatResponse : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(Message message READ message)
+    Q_PROPERTY(QString model READ model)
+    Q_PROPERTY(QString object READ object)
+    Q_PROPERTY(QString id READ id)
+
+public:
+
+    ChatResponse(QObject *parent = nullptr);
+    ChatResponse(const QByteArray & json);
+    ChatResponse(const ChatResponse & copy);
+
+    inline Message message() const { return m_message; }
+    inline QString model() const { return m_model; }
+    inline QString id() const { return m_id; }
+    inline QString object() const { return m_object; }
+
+    ChatResponse & operator=(const ChatResponse & other);
+
+public slots:
+    QByteArray toJson();
+
+signals:
+
+private:
+
+    Message m_message;              // the list of messages to resquest
+    QString m_model;                // the id of the language model to user. ex : gpt-3.5-turbo
+    QString m_id;                   // id of response
+    QString m_object;               // the type of a response
+
+};
+
+
 #endif // CHATREQUEST_H

@@ -13,7 +13,11 @@ ChatRequest * ChatRequest::fromJson(const QByteArray &json)
 {
     ChatRequest * request = new ChatRequest;
     QList<Message> list;
-    auto obj = QJsonDocument::fromJson(json);
+    QJsonParseError error;
+    auto obj = QJsonDocument::fromJson(json, &error);
+
+    if(error.errorString() == "")
+        qDebug() << "[PARSE_ERROR]" << error.errorString();
 
     request->m_model = obj["model"].toString();
     request->m_temperature = obj["temperature"].toDouble();
@@ -56,4 +60,69 @@ QByteArray ChatRequest::toJson()
     json["messages"] = arrMsg;
 
     return QJsonDocument(json).toJson();
+}
+
+/////
+/////
+///
+
+ChatResponse::ChatResponse(QObject *parent)
+    : QObject{parent}
+{
+
+}
+
+
+
+ChatResponse::ChatResponse(const QByteArray & json)
+{
+    QJsonParseError error;
+    auto obj = QJsonDocument::fromJson(json, &error);
+
+    if(error.errorString() == "")
+        qDebug() << "[PARSE_ERROR]" << error.errorString();
+
+    m_model = obj["model"].toString();
+    m_id = obj["id"].toString();
+    m_object = obj["object"].toString();
+    auto msg = obj["choices"].toArray().at(0)["message"].toObject();
+
+    m_message.role = msg["role"].toString();
+    m_message.content = msg["content"].toString();
+    m_message.name = msg["name"].toString();
+}
+
+QByteArray ChatResponse::toJson()
+{
+    QString jsonStr = QString(R"(
+    {
+        "id": "%1",
+        "model": "%2",
+        "object": "%3",
+        "choices":[{
+            "message": {
+                "role": "%4",
+                "content": "%5"
+            }
+        }]
+    })").arg(m_id, m_model, m_object, m_message.role, m_message.content);
+
+    return jsonStr.toLatin1();
+}
+
+ChatResponse & ChatResponse::operator=(const ChatResponse & other) {
+    m_id = other.id();
+    m_message = other.message();
+    m_model = other.model();
+    m_object = other.object();
+
+    return *this;
+}
+
+ChatResponse::ChatResponse(const ChatResponse &copy)
+{
+    m_id = copy.id();
+    m_message = copy.message();
+    m_model = copy.model();
+    m_object = copy.object();
 }
