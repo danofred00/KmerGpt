@@ -10,6 +10,7 @@ Page {
     anchors.fill: parent
 
     property string username
+    property bool isFirstMessage
 
     function addToChat(role, message)
     {
@@ -99,7 +100,8 @@ Page {
                         return;
 
                     // send the message to a bot
-                    OpenAI.send(msg)
+                    OpenAI.send(isFirstMessage ? "system" : "user",
+                                root.username, msg)
                     // clear the area after sending message
                     userMessage.clear();
                     // scroll to the last message
@@ -112,6 +114,9 @@ Page {
     Component.onCompleted: {
         // init OpenAI services when page is loaded
         OpenAI.init()
+
+        // init global properties
+        root.isFirstMessage = true;
     }
 
     Connections {
@@ -120,6 +125,7 @@ Page {
             // response object is updated when this signal is emit
             // OpenAI.logger.d("New response from Assistant")
             console.log("New response from Assistant")
+
             var message = OpenAI.response.message
             addToChat(message.role, message.content)
         }

@@ -72,18 +72,20 @@ QJsonObject OpenAI::readConfigFile(const QString & path)
     return jsonConfig;
 }
 
-void OpenAI::send(const QString &text)
+void OpenAI::send(const QString & role, const QString & username, const QString & text)
 {
     try {
 
         // create a basic request model
         auto json = R"({
             "model": "gpt-3.5-turbo",
-            "messages": [{"role":"user", "content":""}],
+            "messages": [{"role":"user", "content":"", "name":""}],
             "temperature": 0
         })"_json;
         // update text
         json["messages"][0]["content"] = text.toStdString();
+        json["messages"][0]["name"] = username.toStdString();
+        json["messages"][0]["role"] = role.toStdString();
 
         // update m_request
         m_request = ChatRequest(QString::fromStdString(nlohmann::to_string(json)).toLatin1());

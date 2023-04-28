@@ -28,7 +28,7 @@ public:
 
 public slots:
     void init();
-    void send(const QString & text);
+    void send(const QString & role, const QString & username, const QString & text);
     inline ChatResponse * response() { return &m_response; }
     inline ChatRequest * request() { return &m_request; }
 
