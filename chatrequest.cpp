@@ -1,8 +1,6 @@
 #include "chatrequest.h"
 #include <QJsonDocument>
 #include <QJsonObject>
-
-#include <QDebug>
 #include <QJsonArray>
 
 ChatRequest::ChatRequest(QObject *parent)
@@ -20,8 +18,6 @@ ChatRequest * ChatRequest::fromJson(const QByteArray &json)
     request->m_model = obj["model"].toString();
     request->m_temperature = obj["temperature"].toDouble();
     request->m_n = obj["n"].toInt();
-
-    qDebug() << obj;
 
     foreach (const QJsonValue msg, obj["messages"].toArray()) {
         Message m;
