@@ -40,7 +40,7 @@ public:
 class ChatRequest : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QList<Message> messages READ messages)
+    Q_PROPERTY(Message * message READ message_ptr)
     Q_PROPERTY(int n READ n)
     Q_PROPERTY(QString model READ model)
     Q_PROPERTY(float temperature READ temperature)
@@ -52,6 +52,7 @@ public:
     ChatRequest(const ChatRequest & other);
 
     inline Message message() const { return m_message; }
+    inline Message * message_ptr() { return &m_message; }
     inline QString model() const { return m_model; }
     inline int n() const { return m_n; }
     inline float temperature() const { return m_temperature; }
