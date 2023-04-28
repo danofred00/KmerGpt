@@ -119,10 +119,7 @@ ChatResponse & ChatResponse::operator=(const ChatResponse & other) {
     return *this;
 }
 
-ChatResponse::ChatResponse(const ChatResponse &copy)
+ChatResponse::ChatResponse(const ChatResponse & other)
 {
-    m_id = copy.id();
-    m_message = copy.message();
-    m_model = copy.model();
-    m_object = copy.object();
+    *this = other;
 }
