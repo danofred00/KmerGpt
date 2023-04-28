@@ -3,7 +3,35 @@
 
 #include <QObject>
 
-struct Message {
+class Message : public QObject
+{
+
+    Q_OBJECT
+    Q_PROPERTY(QString role READ getRole)
+    Q_PROPERTY(QString name READ getName)
+    Q_PROPERTY(QString content READ getContent)
+
+
+public:
+    inline Message(QObject *parent = nullptr):QObject(parent) {
+
+    }
+    inline Message(const Message & other) {
+        *this = other;
+    }
+
+    inline Message & operator=(const Message & other){
+        role = other.role;
+        name = other.name;
+        content = other.content;
+        return *this;
+    }
+
+    inline QString getRole() const { return role; }
+    inline QString getName() const { return name; }
+    inline QString getContent() const { return content; }
+
+
     QString role;       // the role of the author : system | assistant | user
     QString content;    // the message content
     QString name;       // the name of the author of message
@@ -49,7 +77,7 @@ private:
 class ChatResponse : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(Message message READ message)
+    Q_PROPERTY(Message * message READ message_ptr)
     Q_PROPERTY(QString model READ model)
     Q_PROPERTY(QString object READ object)
     Q_PROPERTY(QString id READ id)
@@ -59,12 +87,13 @@ public:
 
     ChatResponse(QObject *parent = nullptr);
     ChatResponse(const QByteArray & json);
-    ChatResponse(const ChatResponse & copy);
+    ChatResponse(const ChatResponse & other);
 
     inline Message message() const { return m_message; }
     inline QString model() const { return m_model; }
     inline QString id() const { return m_id; }
     inline QString object() const { return m_object; }
+    inline Message * message_ptr() { return &m_message; }
 
     ChatResponse & operator=(const ChatResponse & other);
 
