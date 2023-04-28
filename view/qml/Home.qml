@@ -11,6 +11,15 @@ Page {
 
     property string username
 
+    function addToChat(role, message)
+    {
+        chatModel.append(
+        {
+            "role": role,
+            "message": message
+        });
+    }
+
     header: ToolBar {
 
         ToolButton {
@@ -86,22 +95,13 @@ Page {
                 onClicked: {
 
                     const msg = userMessage.text
-
-                    if(msg=== "")
+                    if(msg === "")
                         return;
-
-                    chatModel.append(
-                    {
-                        "role": 'user',
-                        "message": msg
-                    })
 
                     // send the message to a bot
                     OpenAI.send(msg)
-
                     // clear the area after sending message
                     userMessage.clear();
-
                     // scroll to the last message
                     chatListView.positionViewAtEnd()
                 }
@@ -118,15 +118,16 @@ Page {
         target: OpenAI
         function onResponseReceived(response) {
             // response object is updated when this signal is emit
-            OpenAI.logger.d("New response from Assistant")
-
+            // OpenAI.logger.d("New response from Assistant")
+            console.log("New response from Assistant")
             var message = OpenAI.response.message
+            addToChat(message.role, message.content)
+        }
 
-            chatModel.append(
-            {
-                "role": message.role,
-                "message": message.content
-            })
+        // when request is send
+        function onRequestSend() {
+            // just add the message to a chat
+            addToChat("user", userMessage.text)
         }
     }
 

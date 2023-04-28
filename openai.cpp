@@ -85,6 +85,8 @@ void OpenAI::send(const QString &text)
         // update text
         json["messages"][0]["content"] = text.toStdString();
 
+        // update m_request
+        m_request = ChatRequest(QString::fromStdString(nlohmann::to_string(json)).toLatin1());
         // emit send request signal
         emit requestSend();
         // send the request

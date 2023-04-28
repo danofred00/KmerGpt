@@ -55,7 +55,12 @@ QByteArray ChatRequest::toJson()
         }],
         "temperature": %5,
         "n": %6
-    })").arg(m_model, m_message.name, m_message.role, m_message.content, m_temperature, m_n);
+    })").arg(m_model)
+        .arg(m_message.name)
+        .arg(m_message.role)
+        .arg(m_message.content)
+        .arg(m_temperature)
+        .arg(m_n);
 
     return jsonStr.toLatin1();
 }
@@ -69,8 +74,6 @@ ChatResponse::ChatResponse(QObject *parent)
 {
 
 }
-
-
 
 ChatResponse::ChatResponse(const QByteArray & json)
 {
