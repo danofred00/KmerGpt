@@ -1,6 +1,10 @@
 #include "openai.h"
 #include <exception>
 #include <logger.h>
+#include <QFile>
+
+#include <QJsonObject>
+#include <QJsonDocument>
 
 OpenAI::OpenAI(ILogger * logger, QObject *parent)
     : QObject{parent}, m_logger{logger}
@@ -15,11 +19,48 @@ OpenAI::~OpenAI() {
 void OpenAI::init() {
     try{
         // init openai module
-        openai::start(TOKEN, ORGANISATION);
+        auto config = readConfigFile("config.json");
+        openai::start(config["token"], config["organisation"]);
     } catch (const std::runtime_error & e){
         // log the error message
         logger()->e(e.what());
     }
+}
+
+QJsonObject OpenAI::readConfigFile(const QString & path)
+{
+    // create QFile with the path gived in arguments
+    QFile file {path};
+    QJsonObject jsonConfig;
+    QJsonDocument jsonDoc;
+    QJsonParseError error;
+
+    if (file.exists()) {
+        // open the file
+        file.open(QIODevice::OpenModeFlag::ReadOnly);
+
+        // read contents
+        auto content = file.readAll();
+
+        jsonDoc = QJsonDocument::fromJson(content, &error);
+
+        if(error.error != QJsonParseError::NoError)
+        {
+            // if there's some error, we raised an exception
+            throw std::runtime_error(QString("Could'nt Parse Document : %1").arg(error.errorString()).toStdString());
+        }
+
+        jsonConfig.insert("token", jsonDoc["token"]);
+        jsonConfig.insert("organisation", jsonDoc["organisation"]);
+
+        // close the config file
+        file.close();
+    } else {
+        // if file not exists
+        throw std::runtime_error(QString("Could'nt read config : Config file %1 not exists").arg(file.fileName()).toStdString());
+    }
+
+    return jsonConfig;
 }
 
 void OpenAI::send(const QString &text)

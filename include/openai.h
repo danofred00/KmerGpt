@@ -6,9 +6,6 @@
 #include <openai/openai.hpp>
 #include <logger.h>
 
-#define TOKEN "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"
-#define ORGANISATION "org-FUvuhvV04AZej9EerVzNud3O"
-
 class OpenAI : public QObject
 {
     Q_OBJECT
@@ -39,6 +36,9 @@ signals:
     void responseReceived(const QByteArray & jsonResponse);
 
 private:
+
+    QJsonObject readConfigFile(const QString & path = QString("config.json"));
+
     ILogger * m_logger;
     ChatResponse m_response;
 };

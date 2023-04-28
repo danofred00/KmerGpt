@@ -53,6 +53,9 @@ target_link_libraries(AppKmerGpt PRIVATE ${CURL_LIBRARIES})
 message("Using CURL Lib ${CURL_VERSION_STRING}")
 
 
+# copy config file
+file(COPY ${CMAKE_SOURCE_DIR}/config.json DESTINATION ${CMAKE_BINARY_DIR})
+
 set_target_properties(AppKmerGpt PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
