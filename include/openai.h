@@ -11,6 +11,7 @@ class OpenAI : public QObject
     Q_OBJECT
     Q_PROPERTY(ILogger * logger READ logger WRITE setLogger NOTIFY loggerChanged)
     Q_PROPERTY(ChatResponse * response READ response)
+    Q_PROPERTY(ChatRequest * request READ request)
 
 public:
     OpenAI(ILogger * logger, QObject *parent = nullptr);
@@ -29,6 +30,7 @@ public slots:
     void init();
     void send(const QString & text);
     inline ChatResponse * response() { return &m_response; }
+    inline ChatRequest * request() { return &m_request; }
 
 signals:
     void loggerChanged();
@@ -41,6 +43,7 @@ private:
 
     ILogger * m_logger;
     ChatResponse m_response;
+    ChatRequest m_request;
 };
 
 #endif // OPENAI_H
