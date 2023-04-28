@@ -20,7 +20,16 @@ void OpenAI::init() {
     try{
         // init openai module
         auto config = readConfigFile("config.json");
-        openai::start(config["token"], config["organisation"]);
+
+        logger()->d("Services OpenAI Loading ...");
+
+        openai::start(
+            config.value("token").toString().toStdString(),
+            config.value("organisation").toString().toStdString()
+        );
+
+        logger()->d("Services OpenAI Loading completed");
+
     } catch (const std::runtime_error & e){
         // log the error message
         logger()->e(e.what());
