@@ -63,6 +63,8 @@ Page {
         font.pixelSize: 23
         padding: 10
 
-        onClicked: goHome()
+        onClicked: {
+            goHome()
+        }
     }
 }

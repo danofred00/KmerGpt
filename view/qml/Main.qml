@@ -24,5 +24,4 @@ Window {
             anchors.fill: parent
         }
     }
-
 }
