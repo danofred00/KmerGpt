@@ -13,15 +13,45 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 
 # find packages
-find_package(Qt6 6.4 REQUIRED COMPONENTS Quick)
+find_package(Qt6 6.4 REQUIRED COMPONENTS Quick Core)
+find_package(CURL REQUIRED)
+
+option(CURL_STATIC_LINKING "Set to ON to build libcurl with static linking."  ON)
+
+if(CURL_STATIC_LINKING)
+    message("-DCURL_STATICLIB [added]")
+    add_definitions(-DCURL_STATICLIB)
+endif()
+
+add_definitions(-DJSON_USE_IMPLICIT_CONVERSIONS=0)
 
 qt_standard_project_setup()
 
+set(SOURCES
+    main.cpp openai.cpp
+    logger.cpp chatrequest.cpp
+)
+
+set(HEADERS
+    include/openai.h
+    include/logger.h
+    include/chatrequest.h
+)
+
 # add executables files
 qt_add_executable(AppKmerGpt
-    main.cpp
+    ${SOURCES} ${HEADERS}
     resources.qrc
 )
+
+# add 3rdparty files
+target_include_directories(AppKmerGpt PUBLIC include)
+
+#add curl
+include_directories(${CURL_INCLUDE_DIRS})
+target_link_libraries(AppKmerGpt PRIVATE ${CURL_LIBRARIES})
+message("Using CURL Lib ${CURL_VERSION_STRING}")
+
 
 set_target_properties(AppKmerGpt PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
@@ -33,7 +63,7 @@ set_target_properties(AppKmerGpt PROPERTIES
 
 # link differents lib to our project
 target_link_libraries(AppKmerGpt
-    PRIVATE Qt6::Quick
+    PRIVATE Qt6::Quick Qt6::Core
 )
 
 # install the app
