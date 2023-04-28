@@ -9,57 +9,55 @@ ChatRequest::ChatRequest(QObject *parent)
 
 }
 
-ChatRequest * ChatRequest::fromJson(const QByteArray &json)
+ChatRequest::ChatRequest(const QByteArray & json)
 {
-    ChatRequest * request = new ChatRequest;
-    QList<Message> list;
     QJsonParseError error;
     auto obj = QJsonDocument::fromJson(json, &error);
 
     if(error.error != QJsonParseError::NoError)
         qDebug() << "[PARSE_ERROR]" << error.errorString();
 
-    request->m_model = obj["model"].toString();
-    request->m_temperature = obj["temperature"].toDouble();
-    request->m_n = obj["n"].toInt();
+    m_model = obj["model"].toString();
+    m_temperature = obj["temperature"].toDouble();
+    m_n = obj["n"].toInt();
 
-    foreach (const QJsonValue msg, obj["messages"].toArray()) {
-        Message m;
-        m.role = msg["role"].toString();
-        m.content = msg["content"].toString();
-        m.name = msg["name"].toString();
+    const QJsonValue msg = obj["messages"].toArray().at(0);
+    m_message.role = msg["role"].toString();
+    m_message.content = msg["content"].toString();
+    m_message.name = msg["name"].toString();
 
-        list.append(m);
-    }
-
-    request->m_messages = list;
-
-    return request;
 }
+
+ChatRequest::ChatRequest(const ChatRequest & other) {
+    *this = other;
+}
+
+ChatRequest & ChatRequest::operator=(const ChatRequest & other) {
+
+    m_message = other.message();
+    m_model = other.model();
+    m_temperature = other.temperature();
+    m_n = other.n();
+
+    return *this;
+}
+
 
 QByteArray ChatRequest::toJson()
 {
-    QJsonObject json;
-    QJsonArray arrMsg;
-    json.insert("model", QJsonValue::fromVariant(m_model));
-    json["n"] = m_n;
-    json["temperature"] = m_temperature;
+    QString jsonStr = QString(R"(
+    {
+        "model": "%1",
+        "messages":[{
+                "name": "%2"
+                "role": "%3",
+                "content": "%4"
+        }],
+        "temperature": %5,
+        "n": %6
+    })").arg(m_model, m_message.name, m_message.role, m_message.content, m_temperature, m_n);
 
-    // parse messages
-    for (const auto & msg : m_messages) {
-
-        QJsonObject msgJson;
-
-        msgJson.insert("role", msg.role);
-        msgJson.insert("content", msg.content);
-        msgJson.insert("name", msg.name);
-
-        arrMsg.push_back(msgJson);
-    }
-
-    json["messages"] = arrMsg;
-
-    return QJsonDocument(json).toJson();
+    return jsonStr.toLatin1();
 }
 
 /////

@@ -47,23 +47,26 @@ class ChatRequest : public QObject
 
 public:
 
-    explicit ChatRequest(QObject *parent = nullptr);
+    ChatRequest(QObject *parent = nullptr);
+    ChatRequest(const QByteArray & json);
+    ChatRequest(const ChatRequest & other);
 
-    inline QList<Message> messages() const { return m_messages; }
+    inline Message message() const { return m_message; }
     inline QString model() const { return m_model; }
     inline int n() const { return m_n; }
     inline float temperature() const { return m_temperature; }
 
+    ChatRequest & operator=(const ChatRequest & other);
+
 public slots:
-    static ChatRequest * fromJson(const QByteArray & json);
     QByteArray toJson();
 
 signals:
 
 private:
 
-    QList<Message> m_messages;      // the list of messages to resquest
-    QString m_model;            // the id of the language model to user. ex : gpt-3.5-turbo
+    Message m_message;              // the message to resquest
+    QString m_model;                // the id of the language model to user. ex : gpt-3.5-turbo
     int m_n = 1;                    // the number of response choices to Generate : default 1
     float m_temperature = 0;        // randomize output level
 
