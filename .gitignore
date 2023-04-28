@@ -1,3 +1,4 @@
 
 *.user
 *.qml.*
+config.json

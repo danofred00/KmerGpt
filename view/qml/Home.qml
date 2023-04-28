@@ -7,6 +7,7 @@ import "./Components" as Components
 Page {
 
     id: root
+    anchors.fill: parent
 
     property string username
 
@@ -31,8 +32,6 @@ Page {
         id: drawer
         width: 300
         height: parent.height
-
-
 
     }
 
@@ -86,15 +85,19 @@ Page {
                 display: Button.IconOnly
                 onClicked: {
 
-                    if(userMessage.text === "")
+                    const msg = userMessage.text
+
+                    if(msg=== "")
                         return;
 
-                    console.log("message Send")
                     chatModel.append(
                     {
                         "role": 'user',
-                        "message": userMessage.text
+                        "message": msg
                     })
+
+                    // send the message to a bot
+                    OpenAI.send(msg)
 
                     // clear the area after sending message
                     userMessage.clear();
@@ -103,6 +106,24 @@ Page {
                     chatListView.positionViewAtEnd()
                 }
             }
+        }
+    }
+
+    Component.onCompleted: OpenAI.init()
+
+    Connections {
+        target: OpenAI
+        function onResponseReceived(response) {
+
+            console.log(response)
+            var message = JSON.parse(response)["choices"][0]["message"]
+            console.log(message)
+
+            chatModel.append(
+            {
+                "role": message["role"],
+                "message": message["content"]
+            })
         }
     }
 
