@@ -9,5 +9,6 @@
         <file>view/assets/png/arrow.png</file>
         <file>view/assets/png/send-message.png</file>
         <file>view/qml/FirstScreen.qml</file>
+        <file>view/js/worker.js</file>
     </qresource>
 </RCC>

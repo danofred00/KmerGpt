@@ -5,6 +5,7 @@
 
 #include <QJsonObject>
 #include <QJsonDocument>
+#include <QtConcurrent>
 
 OpenAI::OpenAI(ILogger * logger, QObject *parent)
     : QObject{parent}, m_logger{logger}
@@ -72,6 +73,11 @@ QJsonObject OpenAI::readConfigFile(const QString & path)
     return jsonConfig;
 }
 
+nlohmann::json OpenAI::openai_send(nlohmann::json text)
+{
+    return openai::chat().create(text);
+}
+
 void OpenAI::send(const QString & role, const QString & username, const QString & text)
 {
     try {
@@ -90,17 +96,18 @@ void OpenAI::send(const QString & role, const QString & username, const QString 
         // update m_request
         m_request = ChatRequest(QString::fromStdString(nlohmann::to_string(json)).toLatin1());
         // emit send request signal
-        emit requestSend();
+        emit requestSend(ChatRequest(m_request));
         // send the request
-        auto _response = openai::chat().create(json);
-        auto response_toStr = nlohmann::to_string(_response);
+        QFuture<nlohmann::json> _response = QtConcurrent::run(&OpenAI::openai_send, json);
+        _response.waitForFinished();
+        // stringify the result
+        auto response_toStr = nlohmann::to_string(_response.result());
 
         // update value of local vars
         m_response = ChatResponse(QByteArray::fromStdString(response_toStr));
 
         // emit response received
         emit responseReceived(m_response.toJson());
-
 
     } catch (const std::exception & e) {
         logger()->e(e.what());

@@ -26,6 +26,8 @@ public:
         emit loggerChanged();
     }
 
+    static nlohmann::json openai_send(nlohmann::json text);
+
 public slots:
     void init();
     void send(const QString & role, const QString & username, const QString & text);
@@ -34,7 +36,7 @@ public slots:
 
 signals:
     void loggerChanged();
-    void requestSend();
+    void requestSend(const ChatRequest & request);
     void responseReceived(const QByteArray & jsonResponse);
 
 private:

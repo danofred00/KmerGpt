@@ -14,11 +14,22 @@ Page {
 
     function addToChat(role, message)
     {
-        chatModel.append(
-        {
-            "role": role,
-            "message": message
-        });
+        // send the message to the thread
+        worker.sendMessage({'role':role, 'content': message})
+    }
+
+    WorkerScript {
+        id: worker
+        source: "../js/worker.js"
+        onMessage: function(messageObject){
+            chatModel.append(
+            {
+                "role": messageObject.role,
+                "message": messageObject.content
+            });
+            // scroll to the last message
+            chatListView.positionViewAtEnd()
+        }
     }
 
     header: ToolBar {
@@ -99,13 +110,13 @@ Page {
                     if(msg === "")
                         return;
 
-                    // send the message to a bot
-                    OpenAI.send(isFirstMessage ? "system" : "user",
-                                root.username, msg)
+                    // just add the message to a chat
+                    addToChat("user", msg)
                     // clear the area after sending message
                     userMessage.clear();
-                    // scroll to the last message
-                    chatListView.positionViewAtEnd()
+
+                    // send the message to a bot
+                    OpenAI.send(isFirstMessage ? "system" : "user", root.username, msg)
                 }
             }
         }
@@ -131,9 +142,9 @@ Page {
         }
 
         // when request is send
-        function onRequestSend() {
+        function onRequestSend(message) {
             // just add the message to a chat
-            addToChat("user", userMessage.text)
+            // addToChat(message.role, message.content)
         }
     }
 

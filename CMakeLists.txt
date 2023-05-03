@@ -13,7 +13,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 
 # find packages
-find_package(Qt6 6.4 REQUIRED COMPONENTS Quick Core)
+find_package(Qt6 6.4 REQUIRED COMPONENTS Quick Core Concurrent)
 find_package(CURL REQUIRED)
 
 option(CURL_STATIC_LINKING "Set to ON to build libcurl with static linking."  ON)
@@ -66,7 +66,7 @@ set_target_properties(AppKmerGpt PROPERTIES
 
 # link differents lib to our project
 target_link_libraries(AppKmerGpt
-    PRIVATE Qt6::Quick Qt6::Core
+    PRIVATE Qt6::Quick Qt6::Core Qt6::Concurrent
 )
 
 # install the app

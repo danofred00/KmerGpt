@@ -15,8 +15,8 @@ Rectangle {
         wrapMode: Text.Wrap
         anchors.fill: parent
         padding: 10
-        renderType: Text.NativeRendering
-        textFormat: Text.MarkdownText
+        //renderType: Text.NativeRendering
+        //textFormat: Text.MarkdownText
     }
 
     radius: 5
