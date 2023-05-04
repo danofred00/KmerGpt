@@ -9,7 +9,7 @@ Rectangle {
     x: model.role === "assistant" ? 0 : chatListView.width - width
     implicitHeight: textDelegate.implicitHeight
     color: model.role === "user" ? "red": "green"
-    Label {
+    TextEdit {
         id:textDelegate;
         text: model.message
         wrapMode: Text.Wrap
@@ -17,6 +17,8 @@ Rectangle {
         padding: 10
         //renderType: Text.NativeRendering
         //textFormat: Text.MarkdownText
+        readOnly: true
+        selectByMouse: true
     }
 
     radius: 5
