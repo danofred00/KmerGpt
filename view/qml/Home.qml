@@ -49,11 +49,12 @@ Page {
         }
     }
 
-    Drawer {
+    Components.AppDrawer {
         id: drawer
-        width: 300
-        height: parent.height
-
+        page: root
+        palette: SystemPalette {
+            colorGroup: SystemPalette.Active
+        }
     }
 
     ListView {
