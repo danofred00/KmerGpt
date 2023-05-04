@@ -7,7 +7,7 @@ Page {
 
     function validateInput(input) {
         if (input) {
-            var regex = new RegExp(/[a-zA-Z_ ]+[\da-zA-Z_ ]*/)
+            var regex = new RegExp(/[a-zA-Z_ ]{3,}[\da-zA-Z_ ]*/)
             if (regex.test(input.text))
                 return true;
         }
