@@ -13,7 +13,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 
 # find packages
-find_package(Qt6 6.4 REQUIRED COMPONENTS Quick Core Concurrent)
+find_package(Qt6 REQUIRED COMPONENTS Quick Core Concurrent)
 find_package(CURL REQUIRED)
 
 option(CURL_STATIC_LINKING "Set to ON to build libcurl with static linking."  ON)
